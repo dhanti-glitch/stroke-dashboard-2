@@ -313,9 +313,58 @@ elif menu == "⚠️ Faktor Risiko":
     st.plotly_chart(fig, use_container_width=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
+# PAGE 4: A/B TESTING
+# ══════════════════════════════════════════════════════════════════════════════
+elif menu == "🧪 A/B Testing":
+
+    st.title("🧪 Implementasi A/B Testing")
+
+    st.markdown("""
+    Pengujian dilakukan untuk melihat apakah terdapat
+    hubungan yang signifikan antara hipertensi dan kejadian stroke.
+    """)
+
+    from scipy.stats import chi2_contingency
+
+    contingency = pd.crosstab(
+        df["hypertension"],
+        df["stroke"]
+    )
+
+    st.subheader("Tabel Kontingensi")
+    st.dataframe(contingency)
+
+    chi2, p, dof, expected = chi2_contingency(contingency)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric("Chi-Square", round(chi2, 3))
+
+    with col2:
+        st.metric("P-Value", round(p, 6))
+
+    if p < 0.05:
+        st.success(
+            "Terdapat hubungan signifikan antara hipertensi dan stroke."
+        )
+    else:
+        st.warning(
+            "Tidak terdapat hubungan signifikan."
+        )
+
+    st.markdown("""
+    **Hipotesis**
+
+    - H0 : Tidak ada hubungan hipertensi dengan stroke
+    - H1 : Ada hubungan hipertensi dengan stroke
+    """)
+
+# ══════════════════════════════════════════════════════════════════════════════
 # PAGE 4: KESIMPULAN
 # ══════════════════════════════════════════════════════════════════════════════
-elif menu == "📋 Kesimpulan":
+if menu == "📋 Kesimpulan":
+
     st.title("📋 Kesimpulan & Insight")
     st.markdown("---")
 
@@ -349,58 +398,3 @@ elif menu == "📋 Kesimpulan":
 
     st.markdown("---")
     st.caption("Dashboard dibuat untuk keperluan analisis data proyek Data Science | Stroke Prediction Dataset (Kaggle - fedesoriano)")
-
-    elif menu == "🧪 A/B Testing":
-
-    st.title("🧪 Implementasi A/B Testing")
-
-    st.markdown("""
-    Pengujian dilakukan untuk melihat apakah terdapat
-    hubungan yang signifikan antara hipertensi dan kejadian stroke.
-    """)
-
-    from scipy.stats import chi2_contingency
-
-    contingency = pd.crosstab(
-        df["hypertension"],
-        df["stroke"]
-    )
-
-    st.subheader("Tabel Kontingensi")
-
-    st.dataframe(contingency)
-
-    chi2, p, dof, expected = chi2_contingency(contingency)
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.metric(
-            "Chi-Square",
-            round(chi2, 3)
-        )
-
-    with col2:
-        st.metric(
-            "P-Value",
-            round(p, 6)
-        )
-
-    if p < 0.05:
-
-        st.success(
-            "Terdapat hubungan signifikan antara hipertensi dan stroke."
-        )
-
-    else:
-
-        st.warning(
-            "Tidak terdapat hubungan signifikan."
-        )
-
-    st.markdown("""
-    **Hipotesis**
-
-    - H0 : Tidak ada hubungan hipertensi dengan stroke
-    - H1 : Ada hubungan hipertensi dengan stroke
-    """)
